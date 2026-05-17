@@ -32,7 +32,7 @@ let state = { huidig: null, afgespeeld: [], nummers: [] };
 // ══════════════════════════════════════
 // PINCODE
 // ══════════════════════════════════════
-const JUISTE_PIN = '051009';
+
 let pinBuffer = '';
 
 function pinInvoer(k) {
@@ -298,7 +298,7 @@ function sluitBewerk() {
     bewerkIndex = null;
 }
 
-async function slaBewerk op() {}  // zie hieronder
+async function slaBewerk() {}
 window.slaBewerk = async function() {
     if (bewerkIndex === null) return;
     state.nummers[bewerkIndex] = {
