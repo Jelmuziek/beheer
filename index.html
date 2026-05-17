@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#810162">
+    <title>Openstage Beheer</title>
+    <link rel="stylesheet" href="beheer.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════ -->
+<!-- PINCODE SCHERM                 -->
+<!-- ══════════════════════════════ -->
+<div class="pin-overlay" id="pinOverlay">
+    <div class="pin-box">
+        <div class="pin-logo">🎛️</div>
+        <h2>Openstage Beheer</h2>
+        <p>Voer de pincode in</p>
+        <div class="pin-dots" id="pinDots">
+            <div class="pin-dot" id="d0"></div>
+            <div class="pin-dot" id="d1"></div>
+            <div class="pin-dot" id="d2"></div>
+            <div class="pin-dot" id="d3"></div>
+            <div class="pin-dot" id="d4"></div>
+            <div class="pin-dot" id="d5"></div>
+        </div>
+        <p class="pin-fout" id="pinFout">Verkeerde pincode</p>
+        <div class="pin-grid">
+            <button class="pin-btn" onclick="pinInvoer('1')">1</button>
+            <button class="pin-btn" onclick="pinInvoer('2')">2</button>
+            <button class="pin-btn" onclick="pinInvoer('3')">3</button>
+            <button class="pin-btn" onclick="pinInvoer('4')">4</button>
+            <button class="pin-btn" onclick="pinInvoer('5')">5</button>
+            <button class="pin-btn" onclick="pinInvoer('6')">6</button>
+            <button class="pin-btn" onclick="pinInvoer('7')">7</button>
+            <button class="pin-btn" onclick="pinInvoer('8')">8</button>
+            <button class="pin-btn" onclick="pinInvoer('9')">9</button>
+            <button class="pin-btn" onclick="pinInvoer('wis')">⌫</button>
+            <button class="pin-btn" onclick="pinInvoer('0')">0</button>
+            <button class="pin-btn pin-ok" onclick="pinInvoer('ok')">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════ -->
+<!-- BEHEER APP                     -->
+<!-- ══════════════════════════════ -->
+<div id="app" style="display:none">
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <span class="sidebar-icon">🎸</span>
+            <span class="sidebar-title">Beheer</span>
+        </div>
+        <div class="sidebar-links">
+            <button class="nav-btn active" onclick="toonPagina('home')" id="btn-home">
+                <span>🏠</span> Home
+            </button>
+            <button class="nav-btn" onclick="toonPagina('live')" id="btn-live">
+                <span>🔴</span> Live modus
+            </button>
+            <button class="nav-btn" onclick="toonPagina('setlist')" id="btn-setlist">
+                <span>🎵</span> Setlist bewerken
+            </button>
+            <button class="nav-btn" onclick="toonPagina('instellingen')" id="btn-instellingen">
+                <span>⚙️</span> Instellingen
+            </button>
+        </div>
+        <div class="sidebar-status" id="sidebarStatus">
+            <span class="status-dot"></span> Verbinden...
+        </div>
+    </nav>
+
+    <!-- Hamburger voor mobiel -->
+    <button class="mob-menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="mob-overlay" id="mobOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Content -->
+    <main class="content">
+
+        <!-- ── HOME ── -->
+        <section id="pagina-home" class="pagina actief">
+            <div class="page-header">
+                <h1>Welkom 👋</h1>
+                <p>Kies wat je wilt doen</p>
+            </div>
+            <div class="home-cards">
+                <div class="home-card" onclick="toonPagina('live')">
+                    <div class="card-icon">🔴</div>
+                    <h3>Live modus</h3>
+                    <p>Zet een nummer aan als "nu speelt" — het publiek ziet het meteen.</p>
+                    <span class="card-link">Open →</span>
+                </div>
+                <div class="home-card" onclick="toonPagina('setlist')">
+                    <div class="card-icon">🎵</div>
+                    <h3>Setlist bewerken</h3>
+                    <p>Voeg nummers toe, verwijder ze of verander de volgorde live.</p>
+                    <span class="card-link">Open →</span>
+                </div>
+                <div class="home-card" onclick="toonPagina('instellingen')">
+                    <div class="card-icon">⚙️</div>
+                    <h3>Instellingen</h3>
+                    <p>Reset de show, bekijk de Firebase verbindingsstatus.</p>
+                    <span class="card-link">Open →</span>
+                </div>
+            </div>
+            <div class="home-stats" id="homeStats">
+                <div class="stat-box">
+                    <div class="stat-getal" id="stat-totaal">—</div>
+                    <div class="stat-label">Nummers totaal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-getal" id="stat-afgespeeld">—</div>
+                    <div class="stat-label">Afgespeeld</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-getal" id="stat-resterend">—</div>
+                    <div class="stat-label">Resterend</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── LIVE MODUS ── -->
+        <section id="pagina-live" class="pagina">
+            <div class="page-header">
+                <h1>🔴 Live modus</h1>
+                <p>Klik op ▶ om een nummer live te zetten. Het publiek ziet het direct.</p>
+            </div>
+            <div class="live-status-bar" id="liveStatusBar">
+                Laden...
+            </div>
+            <div id="liveLijst" class="live-lijst"></div>
+            <button class="reset-btn" onclick="resetShow()">🔄 Reset show (einde avond)</button>
+        </section>
+
+        <!-- ── SETLIST BEWERKEN ── -->
+        <section id="pagina-setlist" class="pagina">
+            <div class="page-header">
+                <h1>🎵 Setlist bewerken</h1>
+                <p>Sleep nummers om de volgorde aan te passen. Wijzigingen zijn direct live.</p>
+            </div>
+            <div class="setlist-toolbar">
+                <button class="toolbar-btn" onclick="voegNummerToe()">＋ Nummer toevoegen</button>
+                <button class="toolbar-btn toolbar-btn-ghost" onclick="slaSetlistOp()">💾 Opslaan</button>
+            </div>
+            <div id="setlistEditor" class="setlist-editor"></div>
+        </section>
+
+        <!-- ── INSTELLINGEN ── -->
+        <section id="pagina-instellingen" class="pagina">
+            <div class="page-header">
+                <h1>⚙️ Instellingen</h1>
+            </div>
+
+            <div class="settings-card">
+                <h3>Firebase verbinding</h3>
+                <div class="verbinding-status" id="verbindingStatus">Controleren...</div>
+                <p class="settings-info">Database URL: <code>openstage-597a9</code></p>
+            </div>
+
+            <div class="settings-card">
+                <h3>Show resetten</h3>
+                <p class="settings-info">Dit zet alle "afgespeeld" en "nu speelt" terug naar nul. De setlist blijft staan.</p>
+                <button class="reset-btn" onclick="resetShow()">🔄 Reset show</button>
+            </div>
+
+            <div class="settings-card danger">
+                <h3>Setlist resetten</h3>
+                <p class="settings-info">Dit zet de setlist terug naar de originele 18 nummers.</p>
+                <button class="reset-btn danger-btn" onclick="resetSetlist()">⚠️ Reset setlist</button>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script src="beheer.js"></script>
+</body>
+</html>
