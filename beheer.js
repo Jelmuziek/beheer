@@ -32,6 +32,7 @@ let state = { huidig: null, afgespeeld: [], nummers: [] };
 // ══════════════════════════════════════
 // PINCODE
 // ══════════════════════════════════════
+const JUISTE_PIN = '051009';
 let pinBuffer = '';
 
 function pinInvoer(k) {
