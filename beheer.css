@@ -496,3 +496,106 @@ body {
 }
 
 .editor-artiest::placeholder { color: #ccc; }
+
+/* ══════════════════════════════ */
+/* BEWERKPANEEL (SLIDE-IN)        */
+/* ══════════════════════════════ */
+
+.bewerk-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 500;
+    backdrop-filter: blur(2px);
+}
+.bewerk-overlay.open { display: block; }
+
+.bewerk-panel {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 380px; max-width: 95vw;
+    background: var(--wit);
+    z-index: 600;
+    box-shadow: -8px 0 32px rgba(0,0,0,0.15);
+    transform: translateX(110%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    display: flex; flex-direction: column;
+}
+.bewerk-panel.open { transform: translateX(0); }
+
+.bp-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 22px;
+    border-bottom: 2px solid var(--paars-licht);
+    background: linear-gradient(135deg, rgba(129,1,98,0.05), white);
+}
+
+.bp-header h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; font-size: 1rem; color: var(--paars);
+}
+
+.bp-sluit {
+    background: none; border: none; font-size: 1.2rem;
+    color: #aaa; cursor: pointer; padding: 4px 8px;
+    border-radius: 6px; transition: var(--transitie);
+}
+.bp-sluit:hover { background: #fee; color: #c00; }
+
+.bp-body {
+    flex: 1; overflow-y: auto;
+    padding: 22px;
+    display: flex; flex-direction: column; gap: 14px;
+}
+
+.bp-label {
+    font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: #888; margin-bottom: -8px;
+}
+
+.bp-input {
+    width: 100%; padding: 11px 14px;
+    border: 2px solid #eee; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 0.9rem;
+    color: var(--donker); outline: none;
+    transition: border-color 0.2s;
+}
+.bp-input:focus { border-color: var(--paars); }
+
+.bp-textarea {
+    min-height: 90px; resize: vertical; line-height: 1.5;
+}
+
+.bp-save {
+    background: linear-gradient(135deg, var(--paars), var(--roze));
+    color: white; border: none; border-radius: 10px;
+    padding: 13px; font-family: 'Montserrat', sans-serif;
+    font-weight: 700; font-size: 0.9rem; cursor: pointer;
+    transition: var(--transitie); margin-top: 6px;
+    box-shadow: 0 6px 20px rgba(129,1,98,0.3);
+}
+.bp-save:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(129,1,98,0.4); }
+
+/* ── Edit knop in setlist editor ── */
+.editor-edit-btn {
+    background: none; border: none;
+    font-size: 16px; cursor: pointer;
+    padding: 4px 6px; border-radius: 6px;
+    transition: var(--transitie); flex-shrink: 0;
+}
+.editor-edit-btn:hover { background: var(--paars-licht); transform: scale(1.15); }
+
+/* ── Slots vol / toevoegen ── */
+.editor-add-slot {
+    padding: 14px; text-align: center;
+    color: var(--paars); font-weight: 700; font-size: 0.88rem;
+    border: 2px dashed rgba(129,1,98,0.25); border-radius: 12px;
+    cursor: pointer; transition: var(--transitie);
+}
+.editor-add-slot:hover { background: var(--paars-licht); border-color: var(--paars); }
+
+.slots-vol {
+    text-align: center; color: #aaa;
+    font-size: 0.82rem; padding: 10px;
+}

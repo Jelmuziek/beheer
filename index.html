@@ -16,12 +16,9 @@
         <h2>Openstage Beheer</h2>
         <p>Voer de pincode in</p>
         <div class="pin-dots" id="pinDots">
-            <div class="pin-dot" id="d0"></div>
-            <div class="pin-dot" id="d1"></div>
-            <div class="pin-dot" id="d2"></div>
-            <div class="pin-dot" id="d3"></div>
-            <div class="pin-dot" id="d4"></div>
-            <div class="pin-dot" id="d5"></div>
+            <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+            <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+            <div class="pin-dot" id="d4"></div><div class="pin-dot" id="d5"></div>
         </div>
         <p class="pin-fout" id="pinFout">Verkeerde pincode</p>
         <div class="pin-grid">
@@ -41,9 +38,35 @@
     </div>
 </div>
 
+<!-- BEWERKPANEEL (slide-in) -->
+<div class="bewerk-overlay" id="bewerkOverlay" onclick="sluitBewerk()"></div>
+<div class="bewerk-panel" id="bewerkPanel">
+    <div class="bp-header">
+        <h3 id="bp-titel">Nummer bewerken</h3>
+        <button class="bp-sluit" onclick="sluitBewerk()">✕</button>
+    </div>
+    <div class="bp-body">
+        <label class="bp-label">Naam nummer *</label>
+        <input class="bp-input" id="bp-naam" type="text" placeholder="bijv. Creep" />
+
+        <label class="bp-label">Artiest</label>
+        <input class="bp-input" id="bp-artiest" type="text" placeholder="bijv. Radiohead" />
+
+        <label class="bp-label">Gespeeld door</label>
+        <input class="bp-input" id="bp-gespeeld" type="text" placeholder="bijv. Luuk, Mees en Shaurya" />
+
+        <label class="bp-label">Beschrijving</label>
+        <textarea class="bp-input bp-textarea" id="bp-beschrijving" placeholder="Korte beschrijving of verhaal achter het nummer..."></textarea>
+
+        <label class="bp-label">YouTube link</label>
+        <input class="bp-input" id="bp-youtube" type="url" placeholder="https://youtu.be/..." />
+
+        <button class="bp-save" id="bp-save-btn" onclick="slaBewerk()">💾 Opslaan & sluiten</button>
+    </div>
+</div>
+
 <!-- APP -->
 <div id="app" style="display:none">
-
     <nav class="sidebar">
         <div class="sidebar-logo">
             <span class="sidebar-icon">🎸</span>
@@ -55,9 +78,7 @@
             <button class="nav-btn"        onclick="toonPagina('setlist')"      id="btn-setlist">    <span>🎵</span> Setlist bewerken</button>
             <button class="nav-btn"        onclick="toonPagina('instellingen')" id="btn-instellingen"><span>⚙️</span> Instellingen</button>
         </div>
-        <div class="sidebar-status">
-            <span class="status-dot"></span> Verbinden...
-        </div>
+        <div class="sidebar-status"><span class="status-dot"></span> Verbinden...</div>
     </nav>
 
     <button class="mob-menu-btn" onclick="toggleSidebar()">☰</button>
@@ -69,54 +90,37 @@
         <section id="pagina-home" class="pagina actief">
             <div class="page-header">
                 <h1>Welkom 👋</h1>
-                <p>Openstage beheerpanel — alles op één plek</p>
+                <p>Openstage beheerpanel</p>
             </div>
-
-            <!-- Nu speelt indicator op home -->
             <div class="home-nu-speelt" id="home-nu-speelt" style="display:none"></div>
-
-            <!-- Voortgangsbalk -->
             <div class="voortgangs-wrap">
                 <div class="voortgangs-label">Show voortgang</div>
-                <div class="voortgangs-balk">
-                    <div class="voortgangs-vulling" id="voortgangsBalk"></div>
-                </div>
+                <div class="voortgangs-balk"><div class="voortgangs-vulling" id="voortgangsBalk"></div></div>
             </div>
-
             <div class="home-cards">
                 <div class="home-card" onclick="toonPagina('live')">
                     <div class="card-icon">🔴</div>
                     <h3>Live modus</h3>
-                    <p>Zet een nummer aan als "nu speelt" — het publiek ziet het meteen.</p>
+                    <p>Zet een nummer live. Publiek ziet het direct.</p>
                     <span class="card-link">Open →</span>
                 </div>
                 <div class="home-card" onclick="toonPagina('setlist')">
                     <div class="card-icon">🎵</div>
                     <h3>Setlist bewerken</h3>
-                    <p>Voeg nummers toe, wijzig namen, artiest of volgorde.</p>
+                    <p>Naam, artiest, beschrijving, YouTube — alles aanpasbaar.</p>
                     <span class="card-link">Open →</span>
                 </div>
                 <div class="home-card" onclick="toonPagina('instellingen')">
                     <div class="card-icon">⚙️</div>
                     <h3>Instellingen</h3>
-                    <p>Verbindingsstatus bekijken en de show resetten.</p>
+                    <p>Verbindingsstatus en show resetten.</p>
                     <span class="card-link">Open →</span>
                 </div>
             </div>
-
             <div class="home-stats">
-                <div class="stat-box">
-                    <div class="stat-getal" id="stat-totaal">—</div>
-                    <div class="stat-label">Nummers totaal</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-getal" id="stat-afgespeeld">—</div>
-                    <div class="stat-label">Afgespeeld</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-getal" id="stat-resterend">—</div>
-                    <div class="stat-label">Resterend</div>
-                </div>
+                <div class="stat-box"><div class="stat-getal" id="stat-totaal">—</div><div class="stat-label">Totaal</div></div>
+                <div class="stat-box"><div class="stat-getal" id="stat-afgespeeld">—</div><div class="stat-label">Afgespeeld</div></div>
+                <div class="stat-box"><div class="stat-getal" id="stat-resterend">—</div><div class="stat-label">Resterend</div></div>
             </div>
         </section>
 
@@ -124,18 +128,18 @@
         <section id="pagina-live" class="pagina">
             <div class="page-header">
                 <h1>🔴 Live modus</h1>
-                <p>Klik ▶ om een nummer live te zetten. Het publiek ziet het direct op hun telefoon.</p>
+                <p>Klik ▶ om een nummer live te zetten. Het publiek ziet het direct.</p>
             </div>
             <div class="live-status-bar" id="liveStatusBar">Laden...</div>
             <div id="liveLijst" class="live-lijst"></div>
-            <button class="reset-btn" onclick="resetShow()">🔄 Reset show (einde avond)</button>
+            <button class="reset-btn" onclick="resetShow()">🔄 Reset show</button>
         </section>
 
         <!-- SETLIST BEWERKEN -->
         <section id="pagina-setlist" class="pagina">
             <div class="page-header">
                 <h1>🎵 Setlist bewerken</h1>
-                <p>Sleep om volgorde aan te passen. Wijzigingen worden live doorgevoerd na opslaan.</p>
+                <p>Sleep voor volgorde. Klik ✏️ voor naam, artiest, beschrijving en YouTube per nummer.</p>
             </div>
             <div class="setlist-toolbar">
                 <button class="toolbar-btn" onclick="voegNummerToe()">＋ Nummer toevoegen</button>
@@ -146,19 +150,15 @@
 
         <!-- INSTELLINGEN -->
         <section id="pagina-instellingen" class="pagina">
-            <div class="page-header">
-                <h1>⚙️ Instellingen</h1>
-            </div>
-
+            <div class="page-header"><h1>⚙️ Instellingen</h1></div>
             <div class="settings-card">
                 <h3>Firebase verbinding</h3>
                 <div class="verbinding-status wacht" id="verbindingStatus">Controleren...</div>
                 <p class="settings-info">Database: <code>openstage-597a9-default-rtdb.europe-west1</code></p>
             </div>
-
             <div class="settings-card">
                 <h3>Show resetten</h3>
-                <p class="settings-info">Wist alle "afgespeeld" markeringen en de "nu speelt" indicator. De setlist blijft onaangepast.</p>
+                <p class="settings-info">Wist alle afgespeeld-markeringen. Setlist blijft staan.</p>
                 <button class="reset-btn" onclick="resetShow()">🔄 Reset show</button>
             </div>
         </section>
