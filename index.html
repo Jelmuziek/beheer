@@ -9,9 +9,7 @@
 </head>
 <body>
 
-<!-- ══════════════════════════════ -->
-<!-- PINCODE SCHERM                 -->
-<!-- ══════════════════════════════ -->
+<!-- PINCODE -->
 <div class="pin-overlay" id="pinOverlay">
     <div class="pin-box">
         <div class="pin-logo">🎛️</div>
@@ -43,49 +41,48 @@
     </div>
 </div>
 
-<!-- ══════════════════════════════ -->
-<!-- BEHEER APP                     -->
-<!-- ══════════════════════════════ -->
+<!-- APP -->
 <div id="app" style="display:none">
 
-    <!-- Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-logo">
             <span class="sidebar-icon">🎸</span>
             <span class="sidebar-title">Beheer</span>
         </div>
         <div class="sidebar-links">
-            <button class="nav-btn active" onclick="toonPagina('home')" id="btn-home">
-                <span>🏠</span> Home
-            </button>
-            <button class="nav-btn" onclick="toonPagina('live')" id="btn-live">
-                <span>🔴</span> Live modus
-            </button>
-            <button class="nav-btn" onclick="toonPagina('setlist')" id="btn-setlist">
-                <span>🎵</span> Setlist bewerken
-            </button>
-            <button class="nav-btn" onclick="toonPagina('instellingen')" id="btn-instellingen">
-                <span>⚙️</span> Instellingen
-            </button>
+            <button class="nav-btn active" onclick="toonPagina('home')"         id="btn-home">       <span>🏠</span> Home</button>
+            <button class="nav-btn"        onclick="toonPagina('live')"         id="btn-live">       <span>🔴</span> Live modus</button>
+            <button class="nav-btn"        onclick="toonPagina('setlist')"      id="btn-setlist">    <span>🎵</span> Setlist bewerken</button>
+            <button class="nav-btn"        onclick="toonPagina('instellingen')" id="btn-instellingen"><span>⚙️</span> Instellingen</button>
         </div>
-        <div class="sidebar-status" id="sidebarStatus">
+        <div class="sidebar-status">
             <span class="status-dot"></span> Verbinden...
         </div>
     </nav>
 
-    <!-- Hamburger voor mobiel -->
     <button class="mob-menu-btn" onclick="toggleSidebar()">☰</button>
     <div class="mob-overlay" id="mobOverlay" onclick="toggleSidebar()"></div>
 
-    <!-- Content -->
     <main class="content">
 
-        <!-- ── HOME ── -->
+        <!-- HOME -->
         <section id="pagina-home" class="pagina actief">
             <div class="page-header">
                 <h1>Welkom 👋</h1>
-                <p>Kies wat je wilt doen</p>
+                <p>Openstage beheerpanel — alles op één plek</p>
             </div>
+
+            <!-- Nu speelt indicator op home -->
+            <div class="home-nu-speelt" id="home-nu-speelt" style="display:none"></div>
+
+            <!-- Voortgangsbalk -->
+            <div class="voortgangs-wrap">
+                <div class="voortgangs-label">Show voortgang</div>
+                <div class="voortgangs-balk">
+                    <div class="voortgangs-vulling" id="voortgangsBalk"></div>
+                </div>
+            </div>
+
             <div class="home-cards">
                 <div class="home-card" onclick="toonPagina('live')">
                     <div class="card-icon">🔴</div>
@@ -96,17 +93,18 @@
                 <div class="home-card" onclick="toonPagina('setlist')">
                     <div class="card-icon">🎵</div>
                     <h3>Setlist bewerken</h3>
-                    <p>Voeg nummers toe, verwijder ze of verander de volgorde live.</p>
+                    <p>Voeg nummers toe, wijzig namen, artiest of volgorde.</p>
                     <span class="card-link">Open →</span>
                 </div>
                 <div class="home-card" onclick="toonPagina('instellingen')">
                     <div class="card-icon">⚙️</div>
                     <h3>Instellingen</h3>
-                    <p>Reset de show, bekijk de Firebase verbindingsstatus.</p>
+                    <p>Verbindingsstatus bekijken en de show resetten.</p>
                     <span class="card-link">Open →</span>
                 </div>
             </div>
-            <div class="home-stats" id="homeStats">
+
+            <div class="home-stats">
                 <div class="stat-box">
                     <div class="stat-getal" id="stat-totaal">—</div>
                     <div class="stat-label">Nummers totaal</div>
@@ -122,24 +120,22 @@
             </div>
         </section>
 
-        <!-- ── LIVE MODUS ── -->
+        <!-- LIVE MODUS -->
         <section id="pagina-live" class="pagina">
             <div class="page-header">
                 <h1>🔴 Live modus</h1>
-                <p>Klik op ▶ om een nummer live te zetten. Het publiek ziet het direct.</p>
+                <p>Klik ▶ om een nummer live te zetten. Het publiek ziet het direct op hun telefoon.</p>
             </div>
-            <div class="live-status-bar" id="liveStatusBar">
-                Laden...
-            </div>
+            <div class="live-status-bar" id="liveStatusBar">Laden...</div>
             <div id="liveLijst" class="live-lijst"></div>
             <button class="reset-btn" onclick="resetShow()">🔄 Reset show (einde avond)</button>
         </section>
 
-        <!-- ── SETLIST BEWERKEN ── -->
+        <!-- SETLIST BEWERKEN -->
         <section id="pagina-setlist" class="pagina">
             <div class="page-header">
                 <h1>🎵 Setlist bewerken</h1>
-                <p>Sleep nummers om de volgorde aan te passen. Wijzigingen zijn direct live.</p>
+                <p>Sleep om volgorde aan te passen. Wijzigingen worden live doorgevoerd na opslaan.</p>
             </div>
             <div class="setlist-toolbar">
                 <button class="toolbar-btn" onclick="voegNummerToe()">＋ Nummer toevoegen</button>
@@ -148,7 +144,7 @@
             <div id="setlistEditor" class="setlist-editor"></div>
         </section>
 
-        <!-- ── INSTELLINGEN ── -->
+        <!-- INSTELLINGEN -->
         <section id="pagina-instellingen" class="pagina">
             <div class="page-header">
                 <h1>⚙️ Instellingen</h1>
@@ -156,20 +152,14 @@
 
             <div class="settings-card">
                 <h3>Firebase verbinding</h3>
-                <div class="verbinding-status" id="verbindingStatus">Controleren...</div>
-                <p class="settings-info">Database URL: <code>openstage-597a9</code></p>
+                <div class="verbinding-status wacht" id="verbindingStatus">Controleren...</div>
+                <p class="settings-info">Database: <code>openstage-597a9-default-rtdb.europe-west1</code></p>
             </div>
 
             <div class="settings-card">
                 <h3>Show resetten</h3>
-                <p class="settings-info">Dit zet alle "afgespeeld" en "nu speelt" terug naar nul. De setlist blijft staan.</p>
+                <p class="settings-info">Wist alle "afgespeeld" markeringen en de "nu speelt" indicator. De setlist blijft onaangepast.</p>
                 <button class="reset-btn" onclick="resetShow()">🔄 Reset show</button>
-            </div>
-
-            <div class="settings-card danger">
-                <h3>Setlist resetten</h3>
-                <p class="settings-info">Dit zet de setlist terug naar de originele 18 nummers.</p>
-                <button class="reset-btn danger-btn" onclick="resetSetlist()">⚠️ Reset setlist</button>
             </div>
         </section>
 

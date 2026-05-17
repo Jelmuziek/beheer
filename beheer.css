@@ -406,3 +406,93 @@ body {
     .pin-grid { grid-template-columns: repeat(3, 60px); gap: 6px; }
     .pin-btn { height: 60px; font-size: 1.1rem; }
 }
+
+/* ══════════════════════════════ */
+/* EXTRA HOME ELEMENTEN           */
+/* ══════════════════════════════ */
+
+.home-nu-speelt {
+    background: linear-gradient(135deg, var(--paars), var(--roze));
+    color: white;
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(129,1,98,0.3);
+    animation: fadeIn 0.4s ease;
+}
+
+.voortgangs-wrap {
+    margin-bottom: 24px;
+}
+
+.voortgangs-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.voortgangs-balk {
+    background: #eee;
+    border-radius: 20px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.voortgangs-vulling {
+    height: 100%;
+    background: linear-gradient(90deg, var(--paars), var(--roze));
+    border-radius: 20px;
+    width: 0%;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 8px rgba(224,0,122,0.4);
+}
+
+/* ══════════════════════════════ */
+/* LIVE MODUS VERBETERINGEN       */
+/* ══════════════════════════════ */
+
+.live-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.live-artiest {
+    font-size: 0.75rem;
+    color: #aaa;
+    font-weight: 500;
+}
+
+.klaar-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #4caf50;
+}
+
+/* ══════════════════════════════ */
+/* EDITOR ARTIEST VELD            */
+/* ══════════════════════════════ */
+
+.editor-velden {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.editor-artiest {
+    font-size: 0.78rem !important;
+    color: #aaa !important;
+    font-weight: 400 !important;
+}
+
+.editor-artiest::placeholder { color: #ccc; }
