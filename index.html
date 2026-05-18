@@ -38,29 +38,27 @@
     </div>
 </div>
 
-<!-- BEWERKPANEEL (slide-in) -->
+<!-- BEWERKPANEEL -->
 <div class="bewerk-overlay" id="bewerkOverlay" onclick="sluitBewerk()"></div>
 <div class="bewerk-panel" id="bewerkPanel">
     <div class="bp-header">
         <h3 id="bp-titel">Nummer bewerken</h3>
-        <button class="bp-sluit" onclick="sluitBewerk()">✕</button>
+        <div style="display:flex;gap:8px;align-items:center">
+            <button class="bp-del-btn" onclick="verwijderNummer(bewerkIndex)">🗑 Verwijder</button>
+            <button class="bp-sluit" onclick="sluitBewerk()">✕</button>
+        </div>
     </div>
     <div class="bp-body">
         <label class="bp-label">Naam nummer *</label>
-        <input class="bp-input" id="bp-naam" type="text" placeholder="bijv. Iris" />
-
+        <input class="bp-input" id="bp-naam" type="text" placeholder="bijv. Creep" />
         <label class="bp-label">Artiest</label>
-        <input class="bp-input" id="bp-artiest" type="text" placeholder="bijv. Goo Goo Dolls" />
-
+        <input class="bp-input" id="bp-artiest" type="text" placeholder="bijv. Radiohead" />
         <label class="bp-label">Gespeeld door</label>
-        <input class="bp-input" id="bp-gespeeld" type="text" placeholder="bijv. Stefan, Jari en Huub" />
-
+        <input class="bp-input" id="bp-gespeeld" type="text" placeholder="bijv. Luuk, Mees en Shaurya" />
         <label class="bp-label">Beschrijving</label>
-        <textarea class="bp-input bp-textarea" id="bp-beschrijving" placeholder="Korte beschrijving of verhaal achter het nummer..."></textarea>
-
+        <textarea class="bp-input bp-textarea" id="bp-beschrijving" placeholder="Verhaal achter het nummer..."></textarea>
         <label class="bp-label">YouTube link</label>
         <input class="bp-input" id="bp-youtube" type="url" placeholder="https://youtu.be/..." />
-
         <button class="bp-save" id="bp-save-btn" onclick="slaBewerk()">💾 Opslaan & sluiten</button>
     </div>
 </div>
@@ -75,7 +73,9 @@
         <div class="sidebar-links">
             <button class="nav-btn active" onclick="toonPagina('home')"         id="btn-home">       <span>🏠</span> Home</button>
             <button class="nav-btn"        onclick="toonPagina('live')"         id="btn-live">       <span>🔴</span> Live modus</button>
-            <button class="nav-btn"        onclick="toonPagina('setlist')"      id="btn-setlist">    <span>🎵</span> Setlist bewerken</button>
+            <button class="nav-btn"        onclick="toonPagina('volgorde')"     id="btn-volgorde">   <span>↕️</span> Volgorde</button>
+            <button class="nav-btn"        onclick="toonPagina('songinfo')"     id="btn-songinfo">   <span>✏️</span> Song info</button>
+            <button class="nav-btn"        onclick="toonPagina('datum')"        id="btn-datum">      <span>📅</span> Datum & naam</button>
             <button class="nav-btn"        onclick="toonPagina('instellingen')" id="btn-instellingen"><span>⚙️</span> Instellingen</button>
         </div>
         <div class="sidebar-status"><span class="status-dot"></span> Verbinden...</div>
@@ -90,30 +90,39 @@
         <section id="pagina-home" class="pagina actief">
             <div class="page-header">
                 <h1>Welkom 👋</h1>
-                <p>Openstage beheerpanel</p>
+                <p>Openstage beheerpanel — alles op één plek</p>
             </div>
             <div class="home-nu-speelt" id="home-nu-speelt" style="display:none"></div>
+
+            <!-- Countdown op home -->
+            <div class="home-countdown-wrap">
+                <span class="home-countdown-label">⏱ Show begint over</span>
+                <span class="home-countdown-getal" id="home-countdown">--</span>
+            </div>
+
             <div class="voortgangs-wrap">
                 <div class="voortgangs-label">Show voortgang</div>
                 <div class="voortgangs-balk"><div class="voortgangs-vulling" id="voortgangsBalk"></div></div>
             </div>
             <div class="home-cards">
                 <div class="home-card" onclick="toonPagina('live')">
-                    <div class="card-icon">🔴</div>
-                    <h3>Live modus</h3>
+                    <div class="card-icon">🔴</div><h3>Live modus</h3>
                     <p>Zet een nummer live. Publiek ziet het direct.</p>
                     <span class="card-link">Open →</span>
                 </div>
-                <div class="home-card" onclick="toonPagina('setlist')">
-                    <div class="card-icon">🎵</div>
-                    <h3>Setlist bewerken</h3>
-                    <p>Naam, artiest, beschrijving, YouTube — alles aanpasbaar.</p>
+                <div class="home-card" onclick="toonPagina('volgorde')">
+                    <div class="card-icon">↕️</div><h3>Volgorde</h3>
+                    <p>Sleep nummers om de speelvolgorde aan te passen.</p>
                     <span class="card-link">Open →</span>
                 </div>
-                <div class="home-card" onclick="toonPagina('instellingen')">
-                    <div class="card-icon">⚙️</div>
-                    <h3>Instellingen</h3>
-                    <p>Verbindingsstatus en show resetten.</p>
+                <div class="home-card" onclick="toonPagina('songinfo')">
+                    <div class="card-icon">✏️</div><h3>Song info</h3>
+                    <p>Naam, artiest, beschrijving en YouTube per nummer.</p>
+                    <span class="card-link">Open →</span>
+                </div>
+                <div class="home-card" onclick="toonPagina('datum')">
+                    <div class="card-icon">📅</div><h3>Datum & naam</h3>
+                    <p>Pas de evenementdatum en naam aan voor de countdown.</p>
                     <span class="card-link">Open →</span>
                 </div>
             </div>
@@ -128,24 +137,59 @@
         <section id="pagina-live" class="pagina">
             <div class="page-header">
                 <h1>🔴 Live modus</h1>
-                <p>Klik ▶ om een nummer live te zetten. Het publiek ziet het direct.</p>
+                <p>Klik ▶ om een nummer live te zetten. Publiek ziet het direct op hun telefoon.</p>
             </div>
             <div class="live-status-bar" id="liveStatusBar">Laden...</div>
             <div id="liveLijst" class="live-lijst"></div>
             <button class="reset-btn" onclick="resetShow()">🔄 Reset show</button>
         </section>
 
-        <!-- SETLIST BEWERKEN -->
-        <section id="pagina-setlist" class="pagina">
+        <!-- VOLGORDE -->
+        <section id="pagina-volgorde" class="pagina">
             <div class="page-header">
-                <h1>🎵 Setlist bewerken</h1>
-                <p>Sleep voor volgorde. Klik ✏️ voor naam, artiest, beschrijving en YouTube per nummer.</p>
+                <h1>↕️ Volgorde aanpassen</h1>
+                <p>Sleep nummers naar de gewenste positie, of gebruik de pijltjes. Sla daarna op.</p>
+            </div>
+            <div class="setlist-toolbar">
+                <button class="toolbar-btn" id="volgorde-opslaan-btn" onclick="slaVolgordeOp()">💾 Volgorde opslaan</button>
+            </div>
+            <div id="volgordeEditor" class="volgorde-editor"></div>
+        </section>
+
+        <!-- SONG INFO -->
+        <section id="pagina-songinfo" class="pagina">
+            <div class="page-header">
+                <h1>✏️ Song informatie</h1>
+                <p>Klik op "Bewerken" om naam, artiest, beschrijving en YouTube in te vullen.</p>
             </div>
             <div class="setlist-toolbar">
                 <button class="toolbar-btn" onclick="voegNummerToe()">＋ Nummer toevoegen</button>
-                <button class="toolbar-btn toolbar-btn-ghost" onclick="slaSetlistOp()">💾 Opslaan</button>
             </div>
-            <div id="setlistEditor" class="setlist-editor"></div>
+            <div id="songInfoEditor" class="song-info-editor"></div>
+        </section>
+
+        <!-- DATUM & NAAM -->
+        <section id="pagina-datum" class="pagina">
+            <div class="page-header">
+                <h1>📅 Datum & evenementnaam</h1>
+                <p>Dit wordt gebruikt voor de countdown op de publieke website.</p>
+            </div>
+            <div class="datum-card">
+                <label class="bp-label">Naam evenement</label>
+                <input class="bp-input" id="datum-evenement-naam" type="text"
+                       placeholder="bijv. JEL Openstage 2e editie"
+                       oninput="updateDatumPreview()" />
+
+                <label class="bp-label" style="margin-top:16px">Datum en tijd</label>
+                <input class="bp-input" id="datum-input" type="datetime-local"
+                       oninput="updateDatumPreview()" />
+
+                <div class="datum-preview" id="datum-preview"></div>
+
+                <button class="bp-save" id="datum-opslaan-btn" onclick="slaDatumOp()" style="margin-top:20px">
+                    💾 Datum opslaan
+                </button>
+            </div>
         </section>
 
         <!-- INSTELLINGEN -->
@@ -158,7 +202,7 @@
             </div>
             <div class="settings-card">
                 <h3>Show resetten</h3>
-                <p class="settings-info">Wist alle afgespeeld-markeringen. Setlist blijft staan.</p>
+                <p class="settings-info">Wist alle afgespeeld-markeringen en de live indicator. Setlist en datum blijven staan.</p>
                 <button class="reset-btn" onclick="resetShow()">🔄 Reset show</button>
             </div>
         </section>

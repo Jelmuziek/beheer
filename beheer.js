@@ -1,5 +1,5 @@
 // ══════════════════════════════════════
-// BEHEER.JS – Openstage beheerpanel
+// BEHEER.JS – Openstage beheerpanel v4
 // ══════════════════════════════════════
 
 const JUISTE_PIN = '051009';
@@ -7,32 +7,31 @@ const FB_URL     = 'https://openstage-597a9-default-rtdb.europe-west1.firebaseda
 const MAX_SLOTS  = 30;
 
 const STANDAARD_SETLIST = [
-    { naam: 'American Idiot',                artiest: 'Green Day',       gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Creep',                         artiest: 'Radiohead',       gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Sailor Song',                   artiest: 'Gigi Perez',      gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Lie To Me',                     artiest: '',                gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Clair de Lune',                 artiest: 'Debussy',         gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'From The Start',                artiest: 'Laufey',          gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Desperado',                     artiest: 'Eagles',          gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'iloveitiloveitiloveit',         artiest: '',                gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: '505',                           artiest: 'Arctic Monkeys',  gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Remedy',                        artiest: 'Adele',           gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Van Gogh',                      artiest: '',                gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'One Way Or Another',            artiest: 'Blondie',         gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: "Sweet Child O' Mine",           artiest: "Guns N' Roses",   gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Nothing Else Matters',          artiest: 'Metallica',       gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Price of Smokes & Cockroaches', artiest: '',                gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Feuer Frei',                    artiest: 'Rammstein',       gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Always',                        artiest: 'Bon Jovi',        gespeeldDoor: '', beschrijving: '', youtube: '' },
-    { naam: 'Tequila',                       artiest: 'The Champs',      gespeeldDoor: '', beschrijving: '', youtube: '' },
-].map((s, i) => ({ slot: i + 1, nr: i + 1, ...s }));
+    { naam: 'American Idiot',                artiest: 'Green Day',      gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Creep',                         artiest: 'Radiohead',      gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Sailor Song',                   artiest: 'Gigi Perez',     gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Lie To Me',                     artiest: '',               gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Clair de Lune',                 artiest: 'Debussy',        gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'From The Start',                artiest: 'Laufey',         gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Desperado',                     artiest: 'Eagles',         gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'iloveitiloveitiloveit',         artiest: '',               gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: '505',                           artiest: 'Arctic Monkeys', gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Remedy',                        artiest: 'Adele',          gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Van Gogh',                      artiest: '',               gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'One Way Or Another',            artiest: 'Blondie',        gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: "Sweet Child O' Mine",           artiest: "Guns N' Roses",  gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Nothing Else Matters',          artiest: 'Metallica',      gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Price of Smokes & Cockroaches', artiest: '',               gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Feuer Frei',                    artiest: 'Rammstein',      gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Always',                        artiest: 'Bon Jovi',       gespeeldDoor: '', beschrijving: '', youtube: '' },
+    { naam: 'Tequila',                       artiest: 'The Champs',     gespeeldDoor: '', beschrijving: '', youtube: '' },
+].map((s, i) => ({ slot: i+1, nr: i+1, ...s }));
 
-let state = { huidig: null, afgespeeld: [], nummers: [] };
+let state = { huidig: null, afgespeeld: [], nummers: [], evenementDatum: '2026-12-12T19:00:00', evenementNaam: 'JEL Openstage 2e editie' };
 
 // ══════════════════════════════════════
 // PINCODE
 // ══════════════════════════════════════
-
 let pinBuffer = '';
 
 function pinInvoer(k) {
@@ -45,7 +44,7 @@ function pinInvoer(k) {
 
 function updateDots() {
     for (let i = 0; i < 6; i++)
-        document.getElementById('d' + i).classList.toggle('gevuld', i < pinBuffer.length);
+        document.getElementById('d'+i).classList.toggle('gevuld', i < pinBuffer.length);
 }
 
 function controleerPin() {
@@ -54,11 +53,10 @@ function controleerPin() {
         document.getElementById('app').style.display = 'flex';
         init();
     } else {
-        pinBuffer = '';
-        updateDots();
-        const fout = document.getElementById('pinFout');
-        fout.classList.add('zichtbaar');
-        setTimeout(() => fout.classList.remove('zichtbaar'), 1600);
+        pinBuffer = ''; updateDots();
+        const f = document.getElementById('pinFout');
+        f.classList.add('zichtbaar');
+        setTimeout(() => f.classList.remove('zichtbaar'), 1600);
     }
 }
 
@@ -68,13 +66,15 @@ function controleerPin() {
 function toonPagina(naam) {
     document.querySelectorAll('.pagina').forEach(p => p.classList.remove('actief'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('pagina-' + naam).classList.add('actief');
-    document.getElementById('btn-' + naam).classList.add('active');
+    document.getElementById('pagina-'+naam).classList.add('actief');
+    document.getElementById('btn-'+naam).classList.add('active');
     document.querySelector('.sidebar').classList.remove('open');
     document.getElementById('mobOverlay').classList.remove('open');
 
     if (naam === 'live')        bouwLiveLijst();
-    if (naam === 'setlist')     bouwSetlistEditor();
+    if (naam === 'volgorde')    bouwVolgordeEditor();
+    if (naam === 'songinfo')    bouwSongInfoEditor();
+    if (naam === 'datum')       laadDatumPagina();
     if (naam === 'home')        updateStats();
     if (naam === 'instellingen') updateVerbindingStatus();
 }
@@ -119,7 +119,7 @@ function updateVerbindingStatus() {
     el.className = 'verbinding-status wacht';
     el.textContent = '⏳ Controleren...';
     haalOp().then(data => {
-        el.className = 'verbinding-status ' + (data?'ok':'err');
+        el.className = 'verbinding-status '+(data?'ok':'err');
         el.textContent = data ? '🟢 Verbonden met Firebase' : '🔴 Geen verbinding';
     });
 }
@@ -130,21 +130,22 @@ function updateVerbindingStatus() {
 async function init() {
     const data = await haalOp();
     if (data && Array.isArray(data.nummers) && data.nummers.length > 0) {
-        state = data;
+        state = { ...state, ...data };
     } else {
-        state = { huidig: null, afgespeeld: [], nummers: STANDAARD_SETLIST };
+        state.nummers = STANDAARD_SETLIST;
         await slaOp(state);
     }
     if (!Array.isArray(state.afgespeeld)) state.afgespeeld = [];
+    if (!state.evenementDatum) state.evenementDatum = '2026-12-12T19:00:00';
+    if (!state.evenementNaam)  state.evenementNaam  = 'JEL Openstage 2e editie';
     updateStats();
 
-    // SSE
     try {
-        const sse = new EventSource(FB_URL.replace('.json', '.json?accept=text/event-stream'));
+        const sse = new EventSource(FB_URL.replace('.json','.json?accept=text/event-stream'));
         sse.addEventListener('put', e => {
             try {
                 const d = JSON.parse(e.data).data;
-                if (d?.nummers) { state = d; if (!Array.isArray(state.afgespeeld)) state.afgespeeld = []; }
+                if (d?.nummers) { state = { ...state, ...d }; if (!Array.isArray(state.afgespeeld)) state.afgespeeld = []; }
                 const actief = document.querySelector('.pagina.actief')?.id;
                 if (actief === 'pagina-live') bouwLiveLijst();
                 if (actief === 'pagina-home') updateStats();
@@ -166,7 +167,7 @@ function updateStats() {
     if (el('stat-resterend'))  el('stat-resterend').textContent  = resterend;
 
     const balk = el('voortgangsBalk');
-    if (balk && totaal > 0) balk.style.width = Math.round((afgespeeld/totaal)*100) + '%';
+    if (balk && totaal > 0) balk.style.width = Math.round((afgespeeld/totaal)*100)+'%';
 
     const huidigEl = el('home-nu-speelt');
     if (huidigEl) {
@@ -174,6 +175,29 @@ function updateStats() {
         huidigEl.textContent = song ? `🎵 Nu speelt: ${song.naam}` : '';
         huidigEl.style.display = song ? 'flex' : 'none';
     }
+
+    // Countdown op home
+    if (state.evenementDatum) startHomeCountdown(state.evenementDatum);
+}
+
+// Kleine countdown op homepagina
+let countdownInterval = null;
+function startHomeCountdown(iso) {
+    const el = document.getElementById('home-countdown');
+    if (!el) return;
+    if (countdownInterval) clearInterval(countdownInterval);
+
+    function tick() {
+        const diff = new Date(iso) - new Date();
+        if (diff <= 0) { el.textContent = '🎉 Het is zover!'; return; }
+        const d = Math.floor(diff/86400000);
+        const u = Math.floor((diff%86400000)/3600000);
+        const m = Math.floor((diff%3600000)/60000);
+        const s = Math.floor((diff%60000)/1000);
+        el.textContent = `${d}d ${String(u).padStart(2,'0')}u ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+    }
+    tick();
+    countdownInterval = setInterval(tick, 1000);
 }
 
 // ══════════════════════════════════════
@@ -194,7 +218,7 @@ function bouwLiveLijst() {
     }
 
     lijst.innerHTML = nummers.map((song, i) => {
-        const nr       = i + 1;
+        const nr       = i+1;
         const isActief = state.huidig === nr;
         const isKlaar  = state.afgespeeld.includes(nr);
         return `<div class="live-item ${isActief?'actief':''} ${isKlaar?'klaar':''}">
@@ -236,60 +260,93 @@ async function resetShow() {
 }
 
 // ══════════════════════════════════════
-// SETLIST EDITOR
+// VOLGORDE EDITOR (alleen slepen)
 // ══════════════════════════════════════
 let dragSrc = null;
-let bewerkIndex = null;  // welke song is open in het bewerkpaneel
 
-function bouwSetlistEditor() {
-    const editor = document.getElementById('setlistEditor');
+function bouwVolgordeEditor() {
+    const editor = document.getElementById('volgordeEditor');
     if (!editor) return;
     const nummers = state.nummers || [];
-    const aantalSlots = MAX_SLOTS;
 
     editor.innerHTML = nummers.map((song, i) => `
-        <div class="editor-item" draggable="true" data-index="${i}"
+        <div class="volgorde-item" draggable="true" data-index="${i}"
              ondragstart="dragStart(event,${i})" ondragover="dragOver(event)"
-             ondrop="dragDrop(event,${i})" ondragleave="dragLeave(event)" ondragend="dragEnd(event)">
+             ondrop="dragDrop(event,${i},'volgorde')" ondragleave="dragLeave(event)" ondragend="dragEnd(event)">
             <span class="editor-drag">⠿</span>
-            <span class="editor-nr">${i+1}</span>
-            <div class="editor-velden">
-                <input class="editor-input" type="text" placeholder="Naam nummer"
-                       value="${song.naam||''}" data-field="naam" data-index="${i}"
-                       oninput="updateVeld(${i},'naam',this.value)" />
-                <input class="editor-input editor-artiest" type="text" placeholder="Artiest (optioneel)"
-                       value="${song.artiest||''}" data-field="artiest" data-index="${i}"
-                       oninput="updateVeld(${i},'artiest',this.value)" />
+            <span class="volgorde-nr">${i+1}</span>
+            <div class="volgorde-info">
+                <span class="volgorde-naam">${song.naam || '<em style="color:#ccc">Leeg</em>'}</span>
+                ${song.artiest ? `<span class="volgorde-artiest">${song.artiest}</span>` : ''}
             </div>
-            <button class="editor-edit-btn" onclick="openBewerk(${i})" title="Meer info bewerken">✏️</button>
-            <button class="editor-del" onclick="verwijderNummer(${i})" title="Verwijderen">✕</button>
+            <div class="volgorde-acties">
+                ${i > 0 ? `<button class="pijl-btn" onclick="verplaats(${i},-1)" title="Omhoog">↑</button>` : '<span class="pijl-btn pijl-leeg"></span>'}
+                ${i < nummers.length-1 ? `<button class="pijl-btn" onclick="verplaats(${i},1)" title="Omlaag">↓</button>` : '<span class="pijl-btn pijl-leeg"></span>'}
+            </div>
         </div>
-    `).join('') + (nummers.length < aantalSlots ? `
-        <div class="editor-add-slot" onclick="voegNummerToe()">
-            ＋ Nummer toevoegen (${nummers.length}/${aantalSlots})
-        </div>` : `<p class="slots-vol">Maximum van ${aantalSlots} nummers bereikt</p>`);
+    `).join('');
 }
 
-function updateVeld(index, veld, waarde) {
-    if (state.nummers[index]) state.nummers[index][veld] = waarde;
+function verplaats(index, richting) {
+    const doel = index + richting;
+    if (doel < 0 || doel >= state.nummers.length) return;
+    [state.nummers[index], state.nummers[doel]] = [state.nummers[doel], state.nummers[index]];
+    herNummer();
+    bouwVolgordeEditor();
 }
 
-// Bewerkpaneel per nummer (naam, artiest, gespeeld door, beschrijving, youtube)
+async function slaVolgordeOp() {
+    herNummer();
+    const btn = document.getElementById('volgorde-opslaan-btn');
+    if (btn) { btn.textContent = '⏳ Opslaan...'; btn.disabled = true; }
+    const ok = await slaOp(state);
+    if (btn) {
+        btn.textContent = ok ? '✅ Opgeslagen!' : '❌ Fout!';
+        btn.disabled = false;
+        setTimeout(() => btn.textContent = '💾 Volgorde opslaan', 2200);
+    }
+}
+
+// ══════════════════════════════════════
+// SONG INFO EDITOR (✏️ per nummer)
+// ══════════════════════════════════════
+let bewerkIndex = null;
+
+function bouwSongInfoEditor() {
+    const editor = document.getElementById('songInfoEditor');
+    if (!editor) return;
+    const nummers = state.nummers || [];
+
+    editor.innerHTML = nummers.map((song, i) => `
+        <div class="info-item">
+            <span class="info-nr">${i+1}</span>
+            <div class="info-naam-blok">
+                <span class="info-naam">${song.naam || '<em style="color:#ccc">Leeg</em>'}</span>
+                ${song.artiest ? `<span class="info-artiest">${song.artiest}</span>` : ''}
+            </div>
+            <div class="info-badges">
+                ${song.gespeeldDoor ? '<span class="info-badge">👥</span>' : ''}
+                ${song.beschrijving ? '<span class="info-badge">📝</span>' : ''}
+                ${song.youtube ? '<span class="info-badge">▶️</span>' : ''}
+            </div>
+            <button class="editor-edit-btn" onclick="openBewerk(${i})">✏️ Bewerken</button>
+        </div>
+    `).join('') + (nummers.length < MAX_SLOTS ? `
+        <div class="editor-add-slot" onclick="voegNummerToe()">＋ Nummer toevoegen (${nummers.length}/${MAX_SLOTS})</div>
+    ` : `<p class="slots-vol">Maximum van ${MAX_SLOTS} nummers bereikt</p>`);
+}
+
 function openBewerk(index) {
     bewerkIndex = index;
     const song = state.nummers[index];
-    const panel = document.getElementById('bewerkPanel');
-    const overlay = document.getElementById('bewerkOverlay');
-
     document.getElementById('bp-naam').value         = song.naam         || '';
     document.getElementById('bp-artiest').value      = song.artiest      || '';
     document.getElementById('bp-gespeeld').value     = song.gespeeldDoor || '';
     document.getElementById('bp-beschrijving').value = song.beschrijving || '';
     document.getElementById('bp-youtube').value      = song.youtube      || '';
-    document.getElementById('bp-titel').textContent  = `Nummer ${index+1} bewerken`;
-
-    panel.classList.add('open');
-    overlay.classList.add('open');
+    document.getElementById('bp-titel').textContent  = `Nummer ${index+1}: ${song.naam || 'Leeg'}`;
+    document.getElementById('bewerkPanel').classList.add('open');
+    document.getElementById('bewerkOverlay').classList.add('open');
 }
 
 function sluitBewerk() {
@@ -298,9 +355,11 @@ function sluitBewerk() {
     bewerkIndex = null;
 }
 
-async function slaBewerk() {}
 window.slaBewerk = async function() {
     if (bewerkIndex === null) return;
+    const btn = document.getElementById('bp-save-btn');
+    if (btn) { btn.textContent = '⏳ Opslaan...'; btn.disabled = true; }
+
     state.nummers[bewerkIndex] = {
         ...state.nummers[bewerkIndex],
         naam:         document.getElementById('bp-naam').value.trim(),
@@ -310,55 +369,96 @@ window.slaBewerk = async function() {
         youtube:      document.getElementById('bp-youtube').value.trim(),
     };
     herNummer();
-    sluitBewerk();
-    bouwSetlistEditor();
     const ok = await slaOp(state);
-    const btn = document.getElementById('bp-save-btn');
-    if (btn) { btn.textContent = ok ? '✅ Opgeslagen!' : '❌ Fout'; setTimeout(()=>btn.textContent='💾 Opslaan & sluiten',2000); }
+
+    if (btn) {
+        btn.textContent = ok ? '✅ Opgeslagen!' : '❌ Fout';
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = '💾 Opslaan & sluiten'; }, 1800);
+    }
+
+    if (ok) { setTimeout(() => { sluitBewerk(); bouwSongInfoEditor(); }, 1600); }
 };
 
 function voegNummerToe() {
     if ((state.nummers||[]).length >= MAX_SLOTS) return;
     state.nummers.push({ naam: '', artiest: '', gespeeldDoor: '', beschrijving: '', youtube: '' });
     herNummer();
-    bouwSetlistEditor();
-    // Open meteen het bewerkpaneel voor het nieuwe nummer
-    setTimeout(() => openBewerk(state.nummers.length - 1), 50);
+    bouwSongInfoEditor();
+    setTimeout(() => openBewerk(state.nummers.length-1), 60);
 }
 
 function verwijderNummer(index) {
-    const naam = state.nummers[index]?.naam || 'dit nummer';
-    if (!confirm(`"${naam || 'leeg nummer'}" verwijderen?`)) return;
+    const naam = state.nummers[index]?.naam || 'leeg nummer';
+    if (!confirm(`"${naam}" verwijderen?`)) return;
     state.nummers.splice(index, 1);
     herNummer();
-    bouwSetlistEditor();
+    sluitBewerk();
+    bouwSongInfoEditor();
+    slaOp(state);
 }
 
 function herNummer() {
-    (state.nummers||[]).forEach((n, i) => { n.nr = i+1; n.slot = i+1; });
+    (state.nummers||[]).forEach((n,i) => { n.nr = i+1; n.slot = i+1; });
 }
 
-async function slaSetlistOp() {
-    herNummer();
-    const btn = document.querySelector('.toolbar-btn-ghost');
+// ══════════════════════════════════════
+// DATUM & EVENEMENT
+// ══════════════════════════════════════
+function laadDatumPagina() {
+    const naamEl = document.getElementById('datum-evenement-naam');
+    const datumEl = document.getElementById('datum-input');
+    if (naamEl)  naamEl.value  = state.evenementNaam  || '';
+    if (datumEl) datumEl.value = state.evenementDatum ? state.evenementDatum.slice(0,16) : '';
+    updateDatumPreview();
+}
+
+function updateDatumPreview() {
+    const val  = document.getElementById('datum-input')?.value;
+    const naam = document.getElementById('datum-evenement-naam')?.value;
+    const prev = document.getElementById('datum-preview');
+    if (!prev || !val) return;
+    const d = new Date(val);
+    const opties = { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' };
+    prev.innerHTML = `
+        <div class="datum-preview-naam">${naam || 'Evenement'}</div>
+        <div class="datum-preview-datum">${d.toLocaleDateString('nl-NL', opties)}</div>
+        <div class="datum-preview-sub">Dit is wat het publiek ziet op de countdown</div>
+    `;
+}
+
+async function slaDatumOp() {
+    const naam  = document.getElementById('datum-evenement-naam')?.value.trim();
+    const datum = document.getElementById('datum-input')?.value;
+    if (!datum) { alert('Vul een datum in!'); return; }
+
+    state.evenementNaam  = naam  || state.evenementNaam;
+    state.evenementDatum = datum + ':00';
+
+    const btn = document.getElementById('datum-opslaan-btn');
     if (btn) { btn.textContent = '⏳ Opslaan...'; btn.disabled = true; }
     const ok = await slaOp(state);
     if (btn) {
-        btn.textContent = ok ? '✅ Opgeslagen!' : '❌ Fout!';
+        btn.textContent = ok ? '✅ Datum opgeslagen!' : '❌ Fout!';
         btn.disabled = false;
-        setTimeout(() => btn.textContent = '💾 Opslaan', 2200);
+        setTimeout(() => btn.textContent = '💾 Datum opslaan', 2500);
     }
+    if (ok) updateStats();
 }
 
-// Drag & drop
+// ══════════════════════════════════════
+// DRAG & DROP (gedeeld)
+// ══════════════════════════════════════
 function dragStart(e, i) { dragSrc = i; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
-function dragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function dragOver(e)  { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
 function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
-function dragEnd(e) { e.currentTarget.classList.remove('dragging'); document.querySelectorAll('.editor-item').forEach(el=>el.classList.remove('drag-over','dragging')); }
-function dragDrop(e, targetI) {
+function dragEnd(e)   { e.currentTarget.classList.remove('dragging'); document.querySelectorAll('[class*="item"]').forEach(el=>el.classList.remove('drag-over','dragging')); }
+function dragDrop(e, targetI, type) {
     e.preventDefault(); e.currentTarget.classList.remove('drag-over');
     if (dragSrc===null||dragSrc===targetI) return;
     const moved = state.nummers.splice(dragSrc,1)[0];
     state.nummers.splice(targetI,0,moved);
-    herNummer(); bouwSetlistEditor(); dragSrc=null;
+    herNummer();
+    if (type==='volgorde') bouwVolgordeEditor();
+    dragSrc=null;
 }

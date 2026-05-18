@@ -599,3 +599,156 @@ body {
     text-align: center; color: #aaa;
     font-size: 0.82rem; padding: 10px;
 }
+
+/* ══════════════════════════════ */
+/* HOME COUNTDOWN                 */
+/* ══════════════════════════════ */
+
+.home-countdown-wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--wit); border-radius: var(--radius);
+    padding: 14px 20px; margin-bottom: 18px;
+    box-shadow: var(--schaduw);
+    border-left: 4px solid var(--paars);
+}
+
+.home-countdown-label {
+    font-size: 0.8rem; font-weight: 700;
+    color: #aaa; text-transform: uppercase; letter-spacing: 1px;
+}
+
+.home-countdown-getal {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900; font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--paars), var(--roze));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ══════════════════════════════ */
+/* VOLGORDE EDITOR                */
+/* ══════════════════════════════ */
+
+.volgorde-editor { display: flex; flex-direction: column; gap: 8px; }
+
+.volgorde-item {
+    background: var(--wit); border-radius: 12px;
+    padding: 13px 16px; display: flex; align-items: center; gap: 12px;
+    box-shadow: var(--schaduw); transition: var(--transitie);
+    border-left: 4px solid var(--paars); cursor: grab;
+}
+.volgorde-item:active { cursor: grabbing; }
+.volgorde-item.dragging { opacity: 0.4; transform: scale(0.98); }
+.volgorde-item.drag-over { border-left-color: var(--roze); background: rgba(224,0,122,0.04); }
+
+.volgorde-nr {
+    font-size: 11px; font-weight: 700; color: var(--paars);
+    background: var(--paars-licht); border-radius: 6px;
+    width: 26px; height: 26px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+}
+
+.volgorde-info { flex: 1; }
+.volgorde-naam { font-weight: 600; font-size: 0.92rem; display: block; }
+.volgorde-artiest { font-size: 0.75rem; color: #aaa; }
+
+.volgorde-acties { display: flex; gap: 4px; flex-shrink: 0; }
+
+.pijl-btn {
+    width: 30px; height: 30px; border-radius: 8px;
+    border: none; background: var(--grijs);
+    font-size: 14px; cursor: pointer; transition: var(--transitie);
+    display: flex; align-items: center; justify-content: center;
+}
+.pijl-btn:hover { background: var(--paars); color: white; }
+.pijl-leeg { background: transparent; cursor: default; }
+
+/* ══════════════════════════════ */
+/* SONG INFO EDITOR               */
+/* ══════════════════════════════ */
+
+.song-info-editor { display: flex; flex-direction: column; gap: 8px; }
+
+.info-item {
+    background: var(--wit); border-radius: 12px;
+    padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+    box-shadow: var(--schaduw); transition: var(--transitie);
+    border-left: 4px solid var(--paars);
+}
+.info-item:hover { transform: translateX(3px); }
+
+.info-nr {
+    font-size: 11px; font-weight: 700; color: var(--paars);
+    background: var(--paars-licht); border-radius: 6px;
+    width: 26px; height: 26px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+}
+
+.info-naam-blok { flex: 1; }
+.info-naam   { font-weight: 600; font-size: 0.92rem; display: block; }
+.info-artiest { font-size: 0.75rem; color: #aaa; }
+
+.info-badges { display: flex; gap: 4px; flex-shrink: 0; }
+.info-badge { font-size: 14px; }
+
+.editor-edit-btn {
+    background: var(--paars-licht); border: none;
+    color: var(--paars); font-weight: 700; font-size: 0.78rem;
+    padding: 7px 12px; border-radius: 8px;
+    cursor: pointer; transition: var(--transitie);
+    white-space: nowrap; flex-shrink: 0;
+}
+.editor-edit-btn:hover { background: var(--paars); color: white; }
+
+/* ══════════════════════════════ */
+/* DATUM PAGINA                   */
+/* ══════════════════════════════ */
+
+.datum-card {
+    background: var(--wit); border-radius: var(--radius);
+    padding: 28px 26px; box-shadow: var(--schaduw);
+    border-top: 4px solid var(--paars);
+    max-width: 480px;
+}
+
+.datum-preview {
+    margin-top: 18px; padding: 18px 20px;
+    background: linear-gradient(135deg, rgba(129,1,98,0.06), rgba(224,0,122,0.04));
+    border-radius: 12px; border-left: 4px solid var(--paars);
+    min-height: 60px;
+}
+
+.datum-preview-naam {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; font-size: 1rem; color: var(--paars); margin-bottom: 4px;
+}
+
+.datum-preview-datum {
+    font-weight: 600; font-size: 0.95rem; color: #333; margin-bottom: 4px;
+}
+
+.datum-preview-sub {
+    font-size: 0.75rem; color: #aaa;
+}
+
+/* ══════════════════════════════ */
+/* BEWERKPANEEL VERWIJDER BTN     */
+/* ══════════════════════════════ */
+
+.bp-del-btn {
+    background: #fce4ec; color: #c62828;
+    border: none; border-radius: 8px;
+    padding: 6px 12px; font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; transition: var(--transitie);
+}
+.bp-del-btn:hover { background: #ffcdd2; }
+
+/* ══════════════════════════════ */
+/* HOME CARDS 2x2 GRID            */
+/* ══════════════════════════════ */
+
+.home-cards { grid-template-columns: repeat(2, 1fr) !important; }
+
+@media (max-width: 768px) {
+    .home-cards { grid-template-columns: 1fr !important; }
+}
